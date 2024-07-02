@@ -6,6 +6,7 @@ import com.example.SpringBoot1.entitiy.journalEntity;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
@@ -21,11 +22,16 @@ public class journalEntityService {
     @Autowired
     private userEntityService userEntityService;
 
-    public void save(journalEntity journalEntity,String name){
+  @Transactional
+  public void save(journalEntity journalEntity, String name){
         User user = userEntityService.findByUserName(name);
         journalEntity save = JournalEntityRepository.save(journalEntity);
         user.getJournalEntities().add(journalEntity);
        userEntityService.save(user);
+    }
+    public void save(journalEntity journalEntity){
+        JournalEntityRepository.save(journalEntity);
+
     }
 
     public List<journalEntity> show(){
